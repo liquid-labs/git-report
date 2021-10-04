@@ -55,3 +55,11 @@ Note: The changelog report only supports a local directory link at this time.
 <code>git report pull-requests <a href="#multi-repo-reports">[--multi-base|-M]</a></code>
 
 Generates a report of a repository's pull-requests (PRs). By default, the report lists open PRs ranked by their "staleness".
+
+Report data:
+- number : The number/ID of the PR in the repo.
+- url : The PR URL.
+- summary : The PR summary.
+- age : Age of the PR in days.
+
+The Markdown report includes an opening summary showing mean, median, and mode ages overall. A list of PRs sorted by oldest-first follows, with PR details included. After that, an index of PRs by Organization is presented.
