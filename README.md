@@ -44,7 +44,7 @@ The common `--format|-f` option accepts:
 
 #### Changelog
 
-<code>git report changelog <a href="#--multi-base-m">--multi-base|-M</a></code>
+<code>git report changelog  <a href="#multi-repo-reports">[--multi-base|-M]</a></code>
 
 Generates a changelog based on the git log history. By default, we expect changes to come in as a feature branch and will use the feature branch commit message as the summary for the change. Individual workbranch change commits will be included in an expandable section. Commits directly to the main branch will be considered 'hotfixes' and labeled as such.
 
@@ -52,6 +52,6 @@ Note: The changelog report only supports a local directory link at this time.
 
 #### Pull-requests
 
-<code>git report pull-requests <a href="#--multi-base-m">[--multi-base|-M]</a></code>
+<code>git report pull-requests <a href="#multi-repo-reports">[--multi-base|-M]</a></code>
 
 Generates a report of a repository's pull-requests (PRs). By default, the report lists open PRs ranked by their "staleness".
