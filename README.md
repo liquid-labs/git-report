@@ -25,18 +25,17 @@ git report hub-prs # list outstanding prs
 
 ## Command reference
 
-### Multi-repo reports
+### Common options
 
-The common `--multi-base|-M` option can specify either:
-* a directory containing git repos (hard or soft linked), or
-* a GitHub organization, specified as `github://<GitHub org key>`
+#### Scope
 
-Where supported, the report will include each linked repository or all repos in the named org accessible by the user.
+By default, the report will generate a report based on the current repository (working directory). If `--scope` (or `-s`) is set, then a report will be generated for all repos in the designated scope. Scope may be an org key, such as 'acme' or a repository key such as 'acme/tools'. If scoped to an org, then the report will include all visible repos in the org.
 
-### Report format
+#### Format
 
 The common `--format|-f` option accepts:
-* `markdown` or `md` : (default) Generates a report in Mardown meant to be read by a human. In addition to the basic data, Markdown reports may contain additional content besides the basic data. E.g., graphs, context notes, indexes, etc.
+* `terminal` or `term` : (default) Generates a tabular report for display in a terminal.
+* `markdown` or `md` : Generates a report in Mardown meant to be read by a human. In addition to the basic data, Markdown reports may contain additional content besides the basic data. E.g., graphs, context notes, indexes, etc.
 * `tsv` : Generates report data in "tab separated values" format.
 * `json` : Generates report data in JSON format.
 
@@ -52,13 +51,14 @@ Note: The changelog report only supports a local directory link at this time.
 
 #### Pull-requests
 
-<code>git report pull-requests <a href="#multi-repo-reports">[--multi-base|-M]</a></code>
+<code>git report pull-requests <a href="#multi-repo-reports">[--scope|-s]</a></code>
 
 Generates a report of a repository's pull-requests (PRs). By default, the report lists open PRs ranked by their "staleness".
 
 Report data:
 - number : The number/ID of the PR in the repo.
 - url : The PR URL.
+- status : The status of the PR.
 - summary : The PR summary.
 - age : Age of the PR in days.
 
