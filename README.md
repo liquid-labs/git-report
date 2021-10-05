@@ -38,22 +38,25 @@ The common `--format|-f` option accepts:
 * `markdown` or `md` : Generates a report in Mardown meant to be read by a human. In addition to the basic data, Markdown reports may contain additional content besides the basic data. E.g., graphs, context notes, indexes, etc.
 * `tsv` : Generates report data in "tab separated values" format.
 * `json` : Generates report data in JSON format.
+* `summary` : Prints a one line summary of the report.
 
 ### Reports
 
 #### Changelog
 
-<code>git report changelog  <a href="#multi-repo-reports">[--multi-base|-M]</a></code>
+<code>git report changelog <a href="#format">[--format|-f &lt;format type&gt;]</a></code>
 
 Generates a changelog based on the git log history. By default, we expect changes to come in as a feature branch and will use the feature branch commit message as the summary for the change. Individual workbranch change commits will be included in an expandable section. Commits directly to the main branch will be considered 'hotfixes' and labeled as such.
 
-Note: The changelog report only supports a local directory link at this time.
+Note: The changelog report only supports the current working directory at this time. The use of `--scope` will cause an exit on error.
 
 #### Pull-requests
 
-<code>git report pull-requests <a href="#multi-repo-reports">[--scope|-s]</a></code>
+<code>git report pull-requests <a href="#scope">[--scope|-s]</a> <a href="#format">[--format|-f &lt;format type&gt;]</a> [--open]</code>
 
 Generates a report of a repository's pull-requests (PRs). By default, the report lists open PRs ranked by their "staleness".
+
+`--open` will open a browser window for each PR in the report. This is useful for opening PRs for review with something like `git report pull-requests -f summary --open`
 
 Report data:
 - number : The number/ID of the PR in the repo.
@@ -61,5 +64,7 @@ Report data:
 - status : The status of the PR.
 - summary : The PR summary.
 - age : Age of the PR in days.
+
+Summary format prints the total number of PRs found broken down by status, if any.
 
 The Markdown report includes an opening summary showing mean, median, and mode ages overall. A list of PRs sorted by oldest-first follows, with PR details included. After that, an index of PRs by Organization is presented.
