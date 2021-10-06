@@ -1,6 +1,6 @@
 import { graphql, GraphqlResponseError } from '@octokit/graphql'
 
-import { getAuthenticationParameters } from './lib'
+import { getAuthenticationParameters, processQuery } from './lib'
 
 const PAGE_SIZE = 50
 
@@ -22,7 +22,7 @@ const processGraphQL = async ({ client, query, params }) => {
 }
 
 const prDecomposition =
-  `pullRequests(states: OPEN, first: ${PAGE_SIZE}, after: $lastPrCursor) {
+  `pullRequests(states: $states, first: ${PAGE_SIZE}, after: $lastPrCursor) {
     edges {
       node {
         number
@@ -39,7 +39,7 @@ const prDecomposition =
   }`
 
 const makeOrgQuery = () =>
-  `query($orgName: String!, $lastRepoCursor: String, $lastPrCursor: String) {
+  `query($orgName: String!, $lastRepoCursor: String, $lastPrCursor: String, $states: [PullRequestState!] = [OPEN]) {
     organization(login: $orgName) {
       repositories(first: ${PAGE_SIZE}, after: $lastRepoCursor) {
         edges {
@@ -57,7 +57,7 @@ const makeOrgQuery = () =>
   }`
   
 const makeRepoQuery = () =>
-  `query($orgName: String!, $repoName: String!, $lastPrCursor: String) {
+  `query($orgName: String!, $repoName: String!, $lastPrCursor: String, $states: [PullRequestState!] = [OPEN]) {
     repository(owner: $orgName, name: $repoName) {
       name
       ${prDecomposition}
@@ -90,13 +90,12 @@ const processOrgReport = async ({ client, params }) => {
         // TODO: would be great to refactor to allow multiple in-flight requests; the problem is (I believe) if we didn't await here, then this 'processOrgReport' could return early why pages of PRs are still being resolved
         await processRepoReport({
           client,
-          params: {
-            orgName: params.orgName,
+          params: Object.assign({
             repoName,
             lastPrCursor,
-            records,
-            now: params.now
-          }
+            records
+          }, params) // will assign orgName, now, and any query vars
+          // note 'records' may appear in both, but if so, it will point to the same array, so it's fine
         })
       }
     } // repo processing loop
@@ -135,19 +134,16 @@ const processRepoReport = async ({ client, params }) => {
   return records
 }
 
-const pullRequestsReporter = async (options) => {
-  const authParams = getAuthenticationParameters(options)
+const pullRequestsReporter = async (rawParams) => {
+  const authParams = getAuthenticationParameters(rawParams)
   const graphqlWithAuth = graphql.defaults(authParams)
   
   // set up page tracker object which doubles as input params for the queries
-  const { orgName, repoName } = options
-  const params = {
-    now: new Date(),
-    orgName,
-    repoName
-  }
+  const { format, query, fields, ...params } = rawParams
+  processQuery(query, params, { 'states[]': [ 'OPEN', 'CLOSED', 'MERGED' ]})
+  params.now = new Date()
   
-  const records = repoName === undefined
+  const records = params.repoName === undefined
     ? await processOrgReport({ client: graphqlWithAuth, params })
     : await processRepoReport({ client: graphqlWithAuth, params })
 
