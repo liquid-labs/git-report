@@ -1,7 +1,7 @@
 import { pullRequestsReporter } from './pull-requests'
 
 const reporters = {
-  "pull-requests": pullRequestsReporter
+  'pull-requests' : pullRequestsReporter
 }
 
 export { reporters }

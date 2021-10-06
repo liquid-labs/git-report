@@ -8,13 +8,13 @@ const millisInDay = 24 * 60 * 60 * 1000
 const daysBetween = (d1, d2) =>
   Math.round(Math.abs((d1 - d2) / millisInDay))
 
-const processGraphQL = async ({ client, query, params }) => {
+const processGraphQL = async({ client, query, params }) => {
   try {
     return await client(query, params)
   }
   catch (e) {
     if (e instanceof GraphqlResponseError) {
-      console.error("Request failed:", e.request)
+      console.error('Request failed:', e.request)
       // console.error(error.message)
     }
     throw e
@@ -55,7 +55,7 @@ const makeOrgQuery = () =>
       }
     }
   }`
-  
+
 const makeRepoQuery = () =>
   `query($orgName: String!, $repoName: String!, $lastPrCursor: String, $states: [PullRequestState!] = [OPEN]) {
     repository(owner: $orgName, name: $repoName) {
@@ -64,10 +64,10 @@ const makeRepoQuery = () =>
     }
   }`
 
-const processOrgReport = async ({ client, params }) => {
+const processOrgReport = async({ client, params }) => {
   const query = makeOrgQuery(params)
   const records = params.records || []
-  
+
   let hasMoreRepos = true
   let lastRepoCursor
   while (hasMoreRepos) {
@@ -78,19 +78,19 @@ const processOrgReport = async ({ client, params }) => {
         const prData = prEdgeRecord.node
         records.push(Object.assign(
           {
-            "repo name": repoName,
-            "age in days": daysBetween(params.now, new Date(prData.createdAt))
+            'repo name'   : repoName,
+            'age in days' : daysBetween(params.now, new Date(prData.createdAt))
           },
           prData
         ))
       } // pr processing loop
-      
+
       const { hasNextPage: hasMorePrs, endCursor: lastPrCursor } = repoData.node.pullRequests.pageInfo
       if (hasMorePrs) {
         // TODO: would be great to refactor to allow multiple in-flight requests; the problem is (I believe) if we didn't await here, then this 'processOrgReport' could return early why pages of PRs are still being resolved
         await processRepoReport({
           client,
-          params: Object.assign({
+          params : Object.assign({
             repoName,
             lastPrCursor,
             records
@@ -99,18 +99,18 @@ const processOrgReport = async ({ client, params }) => {
         })
       }
     } // repo processing loop
-    
+
     ({ hasNextPage: hasMoreRepos, endCursor: lastRepoCursor } = result.organization.repositories.pageInfo)
     params.lastRepoCursor = lastRepoCursor
   } // page of repos loop
-  
+
   return records
 }
 
-const processRepoReport = async ({ client, params }) => {
+const processRepoReport = async({ client, params }) => {
   const query = makeRepoQuery(params)
   const records = params.records || []
-  
+
   let hasMorePrs = true
   let lastPrCursor
   while (hasMorePrs) {
@@ -120,13 +120,13 @@ const processRepoReport = async ({ client, params }) => {
       const prRecord = prEdgeRecord.node
       records.push(Object.assign(
         {
-          "repo name": repoName,
-          "age in days": daysBetween(params.now, new Date(prRecord.createdAt))
+          'repo name'   : repoName,
+          'age in days' : daysBetween(params.now, new Date(prRecord.createdAt))
         },
         prRecord
       ))
     } // pr processing loop
-    
+
     ({ hasNextPage: hasMorePrs, endCursor: lastPrCursor } = result.repository.pullRequests.pageInfo)
     params.lastPrCursor = lastPrCursor
   } // page of prs loop
@@ -134,18 +134,18 @@ const processRepoReport = async ({ client, params }) => {
   return records
 }
 
-const pullRequestsReporter = async (rawParams) => {
+const pullRequestsReporter = async(rawParams) => {
   const authParams = requireAuthenticationParameters(rawParams)
   const graphqlWithAuth = graphql.defaults(authParams)
-  
+
   // set up page tracker object which doubles as input params for the queries
   const { format, query, fields, ...params } = rawParams
-  processQuery(query, params, { 'states[]': [ 'OPEN', 'CLOSED', 'MERGED' ]})
+  processQuery(query, params, { 'states[]' : ['OPEN', 'CLOSED', 'MERGED'] })
   params.now = new Date()
-  
+
   const records = params.repoName === undefined
-    ? await processOrgReport({ client: graphqlWithAuth, params })
-    : await processRepoReport({ client: graphqlWithAuth, params })
+    ? await processOrgReport({ client : graphqlWithAuth, params })
+    : await processRepoReport({ client : graphqlWithAuth, params })
 
   records.sort(({ 'age in days': ageA, 'repo name': nameA }, { 'age in days': ageB, 'repo name': nameB }) =>
     ageA < ageB ? 2 : ageA > ageB ? -2 : nameA.localeCompare(nameB))
