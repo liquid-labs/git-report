@@ -1,6 +1,6 @@
 import { graphql, GraphqlResponseError } from '@octokit/graphql'
 
-import { getAuthenticationParameters, processQuery } from './lib'
+import { requireAuthenticationParameters, processQuery } from './lib'
 
 const PAGE_SIZE = 50
 
@@ -135,7 +135,7 @@ const processRepoReport = async ({ client, params }) => {
 }
 
 const pullRequestsReporter = async (rawParams) => {
-  const authParams = getAuthenticationParameters(rawParams)
+  const authParams = requireAuthenticationParameters(rawParams)
   const graphqlWithAuth = graphql.defaults(authParams)
   
   // set up page tracker object which doubles as input params for the queries
