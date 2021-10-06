@@ -9,3 +9,5 @@
 * Implement initial pull-request report _(zane@liquid-labs.com; 2021-10-04T21:18:46.995Z)_
 * _**hotfix**_: Rework target repo spec; add terminal format; tweak pr report _(zane@liquid-labs.com; 2021-10-05T15:18:44.000Z)_
 * _**hotfix**_: Fix option specs and links; add summary format _(zane@liquid-labs.com; 2021-10-05T15:32:14.000Z)_
+* _**hotfix**_: updated CHANGELOGE.md for release (by liq) _(zane@liquid-labs.com; 2021-10-06T20:35:07.000Z)_
+* _**hotfix**_: remove unsupported preversion test _(zane@liquid-labs.com; 2021-10-06T20:36:14.000Z)_
