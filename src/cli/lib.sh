@@ -26,7 +26,7 @@ git-report-lib-validate-normalize-origin() {
 git-report-lib-validate-normalize-scope() {
   if [[ -z "${SCOPE}" ]]; then
     git_dir_init # provided by git-sh-setup; sets 'GIT_DIR' and exits with err if not in a git DIR
-    INITIATED_FROM_WORKING_REPO=true
+    INITIATED_FROM_WORKING_REPO='true'
     local ORIGIN_URL_CONFIG="remote.${ORIGIN}.url"
     local ORIGIN_URL
     ORIGIN_URL="$(git config --get ${ORIGIN_URL_CONFIG})" \
@@ -38,6 +38,8 @@ git-report-lib-validate-normalize-scope() {
       SCOPE="$( shopt -s extglob; echo ${SCOPE/#*:?(\/\/)/} )" # remove everything upto ':' or '://'
       # TODO: verify form of scope == '<repo key' == '<org key>/<repo name>'
     fi
+  else
+    INITIATED_FROM_WORKING_REPO='false'
   fi
 }
 
