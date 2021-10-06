@@ -1,12 +1,12 @@
 {
   "name": "@liquid-labs/git-report",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "Extends git with useful 'report' commands",
   "scripts": {
     "lint": "make lint",
     "lint:fix": "make lint-fix",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "preversion": "make test && make lint",
+    "preversion": "make lint",
     "postversion": "git push upstream v${npm_package_version}"
   },
   "bin": {
