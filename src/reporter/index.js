@@ -7,7 +7,10 @@ const settings = JSON.parse(settingsString)
 
 console.log(settings) // DEBUG
 
-const { report } = settings
+const { report, scope } = settings
+const [ orgName, repoName ] = scope.split('/')
+settings.orgName = orgName
+settings.repoName = repoName
 
 const reportGenerator = reporters[report]
 if (reportGenerator === undefined) {
