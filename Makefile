@@ -19,6 +19,7 @@ $(CLI_BIN): $(CLI_SRC) $(PKG_FILES)
 
 $(REPORTER_BIN): $(REPORTER_SRC)
 	mkdir -p dist
+	# JS_FILE="$<" JS_OUT="$@" JS_FORMAT='es' $(CATALYST_SCRIPTS) build
 	JS_FILE="$<" JS_OUT="$@" $(CATALYST_SCRIPTS) build
 
 # Makefile settings and meta targets

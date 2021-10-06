@@ -72,6 +72,7 @@ git-report-lib-reporter-data() {
     "scope": "'${SCOPE}'",
     "format": "'${FORMAT}'",
     "initiated from working repo": '${INITIATED_FROM_WORKING_REPO}',
-    "origin name": "'${ORIGIN}'"
+    "origin name": "'${ORIGIN}'"'$(test -n "${TOKEN_FILE}" && echo ',
+    "token file": "'${TOKEN_FILE}'"')'
   }'
 }

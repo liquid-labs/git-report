@@ -25,7 +25,8 @@
   "devDependencies": {
     "@liquid-labs/bash-rollup": "^1.0.0-alpha.6",
     "@liquid-labs/bash-toolkit": "^1.0.0-alpha.57",
-    "@liquid-labs/catalyst-scripts": "^1.0.0-alpha.44",
-    "octokit": "^1.6.2"
+    "@liquid-labs/catalyst-scripts": "^1.0.0-alpha.48",
+    "@octokit/graphql": "^4.8.0",
+    "yaml": "^1.10.2"
   }
 }
