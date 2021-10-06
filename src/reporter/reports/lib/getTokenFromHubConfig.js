@@ -8,7 +8,11 @@ const getTokenFromHubConfig = () => {
     hubConfigString = fs.readFileSync(configFile, { encoding: 'utf8' })
   }
   catch (e) {
-    throw new Error(`Could not infer access token from '${configFile}'. Try setting the '--token' or '--token-file' parameters. (${e.message})`)
+    if (!fs.existsSync(configFile)) {
+      // then there's no error; it's just there is no file to get a token from
+      return null
+    } // else
+    throw e
   }
   let hubConfig
   try {
@@ -24,6 +28,7 @@ const getTokenFromHubConfig = () => {
     throw new Error(`Found hub config at '${configFile}', but no 'oauth_token' present.`)
   }
   else {
+    console.warn(`Derived access token from hub config. Consider setting up git-report specific config.`)
     return token
   }
 }
