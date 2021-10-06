@@ -24,7 +24,7 @@ import strict
 # By putting our code in a function, we can declare local vars.
 git-report() {
   # Gather options and arguments
-  eval "$(setSimpleOptions FIELDS:F= FORMAT= ORIGIN:O= QUERY= REPORT= SCOPE= TOKEN= TOKEN_FILE:T= -- "$@")"
+  eval "$(setSimpleOptions FIELDS:F= FORMAT= ORIGIN:O= QUERY= REPORT= SCOPE= TOKEN:T= TOKEN_FILE= -- "$@")"
   [[ -n "${REPORT}" ]] || REPORT="${1:-}"
   
   # An internal flag
