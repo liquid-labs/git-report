@@ -22,7 +22,7 @@ git-report-lib-require-github-access() {
 }
 
 git-report-lib-validate-normalize-format() {
-  local VALID_FORMAT="'terminal' ('term'), 'tsv', 'json', or 'markedown' ('md')"
+  local VALID_FORMAT="'terminal' ('term'), 'tsv', 'json', 'markedown' ('md'), or 'summary'"
   
   # Set default if empty and lowercase value
   [[ -n "${FORMAT}" ]] || FORMAT='terminal'
@@ -33,7 +33,7 @@ git-report-lib-validate-normalize-format() {
       FORMAT='markdown';;
     term)
       FORMAT='terminal';;
-    terminal|markdown|tsv|json)
+    terminal|markdown|tsv|json|summary)
       ;;
     csv)
       echoerr "Did you mean 'tsv'?";;

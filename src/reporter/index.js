@@ -25,13 +25,20 @@ if (reporter === undefined) {
   process.exit(1)
 }
 
-// await reporter.call(null, settings)
+if (format === 'summary' && reporter.summarizer === undefined) {
+  console.error(`Report '${report}' does not support summarization.`)
+  process.exit(1)
+}
+
 reporter.generator.call(null, reportParams)
-  .then((records) => {
+  .then(({ records, params }) => {
     // TODO: support custom fields
     const pickFields = fields || reporter.defaultFields
     
     switch (format) {
+      case 'summary': // we've already checked if 'summarizer' exists and exited if not
+        reporter.summarizer.call(null, { records, params })
+        break;
       case 'json':
       const fRecords = records.map((r) => pick(r, pickFields))
         console.log(JSON.stringify(fRecords, null, 2)); break

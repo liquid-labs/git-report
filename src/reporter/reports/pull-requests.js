@@ -160,12 +160,30 @@ const generator = async(rawParams) => {
     }
   }
   
-  return records
+  return { records, params }
+}
+
+const summarizer = ({ records, params }) => {
+  const { states = ['OPEN'] } = params
+  let summary = `Found ${records.length} `
+  if (states.length === 1) {
+    summary += `${states[0]} records.`
+  }
+  else if (states.length > 1) {
+    summary +=
+      `total records; ${states.map((s) => `${records.filter((r) => r.state === s).length} ${s}`).join(', ')}.`
+  }
+  else {
+    summary += 'records.'
+  }
+  
+  console.log(summary)
 }
 
 const pullRequestsReporter = {
   defaultFields,
   generator,
+  summarizer,
   canOpen : true
 }
 
