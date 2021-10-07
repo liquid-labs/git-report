@@ -30,3 +30,18 @@
   securityNotes: []
   drpBcpNotes: []
   backoutNotes: []
+- startTimestamp: 2021-10-07T04:05:11.177Z
+  startEpochMillis: 1633579511177
+  issues:
+    - https://github.com/Liquid-Labs/git-report/issues/5
+  branch: 2021.10.06-zane@liquid-labs.com-implement_the_pr_report
+  branchFrom: 42d42dd456789df0767ed1e1a097f5c47771285d
+  workInitiator: zane@liquid-labs.com
+  branchInitiator: zane@liquid-labs.com
+  involvedProjects:
+    - "@liquid-labs/git-report"
+  changeNotes:
+    - Implement the pr report --open  and summary format options
+  securityNotes: []
+  drpBcpNotes: []
+  backoutNotes: []
