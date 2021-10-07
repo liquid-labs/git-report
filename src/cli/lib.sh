@@ -7,7 +7,10 @@ git-report-lib-reporter-data() {
     "origin name": "'${ORIGIN}'",
     "query": "'${QUERY}'",
     "fields": "'${FIELDS}'"'$(test -n "${TOKEN_FILE}" && echo ',
-    "token file": "'${TOKEN_FILE}'"')'
+    "token file": "'${TOKEN_FILE}'"')$(test -n "${TOKEN}" && echo ',
+    "token": "'${TOKEN}'"')$(test -n "${OPEN}" && echo ',
+    "open": true')',
+    "openLimit": '$( [[ -n "${OPEN_LIMIT}" ]] && echo "${OPEN_LIMIT}" || echo 10)'
   }'
 }
 
@@ -19,7 +22,7 @@ git-report-lib-require-github-access() {
 }
 
 git-report-lib-validate-normalize-format() {
-  local VALID_FORMAT="'terminal' ('term'), 'tsv', 'json', or 'markedown' ('md')"
+  local VALID_FORMAT="'terminal' ('term'), 'tsv', 'json', 'markedown' ('md'), or 'summary'"
   
   # Set default if empty and lowercase value
   [[ -n "${FORMAT}" ]] || FORMAT='terminal'
@@ -30,7 +33,7 @@ git-report-lib-validate-normalize-format() {
       FORMAT='markdown';;
     term)
       FORMAT='terminal';;
-    terminal|markdown|tsv|json)
+    terminal|markdown|tsv|json|summary)
       ;;
     csv)
       echoerr "Did you mean 'tsv'?";;

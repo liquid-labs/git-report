@@ -37,6 +37,7 @@
     "@liquid-labs/catalyst-scripts": "^1.0.0-alpha.49",
     "@octokit/graphql": "^4.8.0",
     "lodash": "^4.17.21",
+    "open": "^8.2.1",
     "yaml": "^1.10.2"
   }
 }

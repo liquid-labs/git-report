@@ -1,4 +1,5 @@
 import { graphql, GraphqlResponseError } from '@octokit/graphql'
+import open from 'open'
 
 import { requireAuthenticationParameters, processQuery } from './lib'
 
@@ -118,13 +119,11 @@ const processRepoReport = async({ client, params }) => {
     const repoName = result.repository.name
     for (const prEdgeRecord of result.repository.pullRequests.edges) {
       const prRecord = prEdgeRecord.node
-      records.push(Object.assign(
-        {
-          'repo name'   : repoName,
-          'age in days' : daysBetween(params.now, new Date(prRecord.createdAt))
-        },
-        prRecord
-      ))
+      const record = {
+        'repo name'   : repoName,
+        'age in days' : daysBetween(params.now, new Date(prRecord.createdAt))
+      }
+      records.push(Object.assign( record, prRecord ))
     } // pr processing loop
 
     ({ hasNextPage: hasMorePrs, endCursor: lastPrCursor } = result.repository.pullRequests.pageInfo)
@@ -134,9 +133,8 @@ const processRepoReport = async({ client, params }) => {
   return records
 }
 
-const pullRequestsReporter = {
-  defaultFields : [ 'title', 'state', 'permalink', 'age in days' ]
-}
+
+const  defaultFields = [ 'title', 'state', 'permalink', 'age in days' ]
 
 const generator = async(rawParams) => {
   const authParams = requireAuthenticationParameters(rawParams)
@@ -151,14 +149,60 @@ const generator = async(rawParams) => {
     ? await processOrgReport({ client : graphqlWithAuth, params })
     : await processRepoReport({ client : graphqlWithAuth, params })
 
-  if (params.repoName === undefined) pullRequestsReporter.defaultFields.splice(0, 0, 'repo name')
+  if (params.repoName === undefined) defaultFields.splice(0, 0, 'repo name')
 
-  records.sort(({ 'age in days': ageA, 'repo name': nameA }, { 'age in days': ageB, 'repo name': nameB }) =>
-    ageA < ageB ? 2 : ageA > ageB ? -2 : nameA.localeCompare(nameB))
+  const stateValues = {
+    'OPEN' : 2,
+    'MERGED' : 1,
+    'CLOSED' : 0
+  }
+
+  if (format !== 'summary') { // no need to waste time sorting if we're not going to display the records
+    records.sort((
+        { 'age in days': ageA, 'repo name': nameA, state: stateA },
+        { 'age in days': ageB, 'repo name': nameB, state: stateB }) =>
+      stateValues[stateA] < stateValues[stateB]
+        ? 3
+        : stateValues[stateA] > stateValues[stateB]
+          ? -3
+          : ageA < ageB
+            ? 2
+            : ageA > ageB
+              ? -2
+              : nameA.localeCompare(nameB))
+  }
   
-  return records
+  if (params.open === true) {
+    for (let i = 0; i < params.openLimit; i += 1) {
+      open(records[i].permalink)
+    }
+  }
+  
+  return { records, params }
 }
 
-pullRequestsReporter.generator = generator
+const summarizer = ({ records, params }) => {
+  const { states = ['OPEN'] } = params
+  let summary = `Found ${records.length} `
+  if (states.length === 1) {
+    summary += `${states[0]} records.`
+  }
+  else if (states.length > 1) {
+    summary +=
+      `total records; ${states.map((s) => `${records.filter((r) => r.state === s).length} ${s}`).join(', ')}.`
+  }
+  else {
+    summary += 'records.'
+  }
+  
+  console.log(summary)
+}
+
+const pullRequestsReporter = {
+  defaultFields,
+  generator,
+  summarizer,
+  canOpen : true
+}
 
 export { pullRequestsReporter }
