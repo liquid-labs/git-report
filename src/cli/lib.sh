@@ -7,7 +7,8 @@ git-report-lib-reporter-data() {
     "origin name": "'${ORIGIN}'",
     "query": "'${QUERY}'",
     "fields": "'${FIELDS}'"'$(test -n "${TOKEN_FILE}" && echo ',
-    "token file": "'${TOKEN_FILE}'"')'
+    "token file": "'${TOKEN_FILE}'"')$(test -n "${TOKEN}" && echo ',
+    "token": "'${TOKEN}'"')'
   }'
 }
 
