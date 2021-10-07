@@ -15,3 +15,8 @@
 ## Release 1.0.0-alpha.2
 * _**hotfix**_: add license stuff in prep for public publish _(zane@liquid-labs.com; 2021-10-07T02:57:13.000Z)_
 * _**hotfix**_: updated CHANGELOGE.md for release (by liq) _(zane@liquid-labs.com; 2021-10-07T02:57:18.000Z)_
+
+## Release 1.0.0-alpha.3
+* _**hotfix**_: added missing code fences+access token setup _(zane@liquid-labs.com; 2021-10-07T03:04:33.000Z)_
+* Implement json, tsv, and terminal formatting _(zane@liquid-labs.com; 2021-10-07T03:54:01.273Z)_
+* Implement the pr report --open  and summary format options _(zane@liquid-labs.com; 2021-10-07T04:05:11.177Z)_
