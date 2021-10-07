@@ -11,3 +11,7 @@
 * _**hotfix**_: Fix option specs and links; add summary format _(zane@liquid-labs.com; 2021-10-05T15:32:14.000Z)_
 * _**hotfix**_: updated CHANGELOGE.md for release (by liq) _(zane@liquid-labs.com; 2021-10-06T20:35:07.000Z)_
 * _**hotfix**_: remove unsupported preversion test _(zane@liquid-labs.com; 2021-10-06T20:36:14.000Z)_
+
+## Release 1.0.0-alpha.2
+* _**hotfix**_: add license stuff in prep for public publish _(zane@liquid-labs.com; 2021-10-07T02:57:13.000Z)_
+* _**hotfix**_: updated CHANGELOGE.md for release (by liq) _(zane@liquid-labs.com; 2021-10-07T02:57:18.000Z)_
