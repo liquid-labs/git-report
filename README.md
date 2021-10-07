@@ -99,7 +99,11 @@ Changelog is currently a local only report limited to the current working repo. 
 
 <code>git report pull-requests <a href="#scope">[--scope|-s]</a> <a href="#format">[--format|-f &lt;format type&gt;]</a> [--open]</code>
 
-Generates a report of a repository's pull-requests (PRs). By default, the report lists open PRs ranked by their "staleness".
+Generates a report of a repository's pull-requests (PRs). By default, the report lists open PRs sorted by:
+* state (OPEN > MERGED > CLOSED)
+* 'age in days',
+* 'repo name'
+The sort does not depend on the fields being included in the report.
 
 Pull-requests is a purely remote report.
 
@@ -119,4 +123,4 @@ Default fields:
 * status : The status of the PR.
 * age : Age of the PR in days.
 
-Summary format prints the total number of PRs found.
+Summary format prints the total number of PRs found and a count by each state in the search.

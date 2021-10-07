@@ -151,8 +151,26 @@ const generator = async(rawParams) => {
 
   if (params.repoName === undefined) defaultFields.splice(0, 0, 'repo name')
 
-  records.sort(({ 'age in days': ageA, 'repo name': nameA }, { 'age in days': ageB, 'repo name': nameB }) =>
-    ageA < ageB ? 2 : ageA > ageB ? -2 : nameA.localeCompare(nameB))
+  const stateValues = {
+    'OPEN' : 2,
+    'MERGED' : 1,
+    'CLOSED' : 0
+  }
+
+  if (format !== 'summary') { // no need to waste time sorting if we're not going to display the records
+    records.sort((
+        { 'age in days': ageA, 'repo name': nameA, state: stateA },
+        { 'age in days': ageB, 'repo name': nameB, state: stateB }) =>
+      stateValues[stateA] < stateValues[stateB]
+        ? 3
+        : stateValues[stateA] > stateValues[stateB]
+          ? -3
+          : ageA < ageB
+            ? 2
+            : ageA > ageB
+              ? -2
+              : nameA.localeCompare(nameB))
+  }
   
   if (params.open === true) {
     for (let i = 0; i < params.openLimit; i += 1) {
