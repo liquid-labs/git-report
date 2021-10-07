@@ -12,9 +12,12 @@
   "bin": {
     "git-report": "./dist/git-report.sh"
   },
+  "files": [
+    "./dist/*"
+  ],
   "keywords": [],
   "author": "Zane Rockenbaugh <zane@liquid-labs.com>",
-  "license": "UNLICENSED",
+  "license": "BSD+Patent",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/Liquid-Labs/git-report.git"
@@ -24,12 +27,14 @@
   },
   "homepage": "https://github.com/Liquid-Labs/git-report#readme",
   "liq": {
-    "orgBase": "git@github.com:Liquid-Labs/Liquid-Labs.git"
+    "orgBase": "git@github.com:Liquid-Labs/Liquid-Labs.git",
+    "packageType": "node|cli tool|bash|git-plugin",
+    "licenseText": "./LICENSE.txt"
   },
   "devDependencies": {
     "@liquid-labs/bash-rollup": "^1.0.0-alpha.6",
     "@liquid-labs/bash-toolkit": "^1.0.0-alpha.57",
-    "@liquid-labs/catalyst-scripts": "^1.0.0-alpha.48",
+    "@liquid-labs/catalyst-scripts": "^1.0.0-alpha.49",
     "@octokit/graphql": "^4.8.0",
     "yaml": "^1.10.2"
   }

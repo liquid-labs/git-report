@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
-# 'strict' made enabled after sourcing git-sh-setup; see below
+# The following code is licensed under the BSD+Patent license. A copy is included in 'LICENSE.txt' in the standard
+# distribution and is also available at https://opensource.org/licenses/BSDplusPatent
+
+# 'strict' made enabled later; see below
 
 import echoerr
 import lists
