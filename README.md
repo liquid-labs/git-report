@@ -17,13 +17,26 @@ Core reports:
 
 ## Installation
 
+``` bash
 npm i -g @liquid-labs/git-report
+```
+
+You will also need [a GitHub personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token). To automate use of the token, create a file `~/.config/git-report` with the contents:
+```yaml
+access_token: XXXXXXXXX
+```
+Where 'XXXXXX' is your access token. Secure the file with:
+```bash
+chmod 600 ~/.config/git-report
+```
 
 ## Usage
 
+``` bash
 git report # lists available reports
 git report changelog # git generated change log
 git report hub-prs # list outstanding prs
+```
 
 ## Command reference
 
