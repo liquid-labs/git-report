@@ -41,7 +41,10 @@ git-report() {
   local REPORTER
   REPORTER="$(dirname "$(real_path "${0}")")/reporter.js"
   
-  git-report-${REPORT}
+  git-report-${REPORT} \
+    | { [[ "${FORMAT}" == 'terminal' ]] \
+        && column -s $'\t' -t \
+        || cat; }
 }
 
 git-report "$@"
