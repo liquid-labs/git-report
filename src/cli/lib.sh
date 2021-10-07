@@ -8,7 +8,9 @@ git-report-lib-reporter-data() {
     "query": "'${QUERY}'",
     "fields": "'${FIELDS}'"'$(test -n "${TOKEN_FILE}" && echo ',
     "token file": "'${TOKEN_FILE}'"')$(test -n "${TOKEN}" && echo ',
-    "token": "'${TOKEN}'"')'
+    "token": "'${TOKEN}'"')$(test -n "${OPEN}" && echo ',
+    "open": true')',
+    "openLimit": '$( [[ -n "${OPEN_LIMIT}" ]] && echo "${OPEN_LIMIT}" || echo 10)'
   }'
 }
 

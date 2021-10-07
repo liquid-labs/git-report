@@ -1,4 +1,5 @@
 import { graphql, GraphqlResponseError } from '@octokit/graphql'
+import open from 'open'
 
 import { requireAuthenticationParameters, processQuery } from './lib'
 
@@ -118,13 +119,11 @@ const processRepoReport = async({ client, params }) => {
     const repoName = result.repository.name
     for (const prEdgeRecord of result.repository.pullRequests.edges) {
       const prRecord = prEdgeRecord.node
-      records.push(Object.assign(
-        {
-          'repo name'   : repoName,
-          'age in days' : daysBetween(params.now, new Date(prRecord.createdAt))
-        },
-        prRecord
-      ))
+      const record = {
+        'repo name'   : repoName,
+        'age in days' : daysBetween(params.now, new Date(prRecord.createdAt))
+      }
+      records.push(Object.assign( record, prRecord ))
     } // pr processing loop
 
     ({ hasNextPage: hasMorePrs, endCursor: lastPrCursor } = result.repository.pullRequests.pageInfo)
@@ -134,9 +133,8 @@ const processRepoReport = async({ client, params }) => {
   return records
 }
 
-const pullRequestsReporter = {
-  defaultFields : [ 'title', 'state', 'permalink', 'age in days' ]
-}
+
+const  defaultFields = [ 'title', 'state', 'permalink', 'age in days' ]
 
 const generator = async(rawParams) => {
   const authParams = requireAuthenticationParameters(rawParams)
@@ -151,14 +149,24 @@ const generator = async(rawParams) => {
     ? await processOrgReport({ client : graphqlWithAuth, params })
     : await processRepoReport({ client : graphqlWithAuth, params })
 
-  if (params.repoName === undefined) pullRequestsReporter.defaultFields.splice(0, 0, 'repo name')
+  if (params.repoName === undefined) defaultFields.splice(0, 0, 'repo name')
 
   records.sort(({ 'age in days': ageA, 'repo name': nameA }, { 'age in days': ageB, 'repo name': nameB }) =>
     ageA < ageB ? 2 : ageA > ageB ? -2 : nameA.localeCompare(nameB))
   
+  if (params.open === true) {
+    for (let i = 0; i < params.openLimit; i += 1) {
+      open(records[i].permalink)
+    }
+  }
+  
   return records
 }
 
-pullRequestsReporter.generator = generator
+const pullRequestsReporter = {
+  defaultFields,
+  generator,
+  canOpen : true
+}
 
 export { pullRequestsReporter }
