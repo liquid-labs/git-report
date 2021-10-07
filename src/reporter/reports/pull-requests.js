@@ -134,7 +134,11 @@ const processRepoReport = async({ client, params }) => {
   return records
 }
 
-const pullRequestsReporter = async(rawParams) => {
+const pullRequestsReporter = {
+  defaultFields : [ 'title', 'state', 'permalink', 'age in days' ]
+}
+
+const generator = async(rawParams) => {
   const authParams = requireAuthenticationParameters(rawParams)
   const graphqlWithAuth = graphql.defaults(authParams)
 
@@ -147,9 +151,14 @@ const pullRequestsReporter = async(rawParams) => {
     ? await processOrgReport({ client : graphqlWithAuth, params })
     : await processRepoReport({ client : graphqlWithAuth, params })
 
+  if (params.repoName === undefined) pullRequestsReporter.defaultFields.splice(0, 0, 'repo name')
+
   records.sort(({ 'age in days': ageA, 'repo name': nameA }, { 'age in days': ageB, 'repo name': nameB }) =>
     ageA < ageB ? 2 : ageA > ageB ? -2 : nameA.localeCompare(nameB))
-  console.log(records)
+  
+  return records
 }
+
+pullRequestsReporter.generator = generator
 
 export { pullRequestsReporter }
