@@ -20,3 +20,5 @@
 * _**hotfix**_: added missing code fences+access token setup _(zane@liquid-labs.com; 2021-10-07T03:04:33.000Z)_
 * Implement json, tsv, and terminal formatting _(zane@liquid-labs.com; 2021-10-07T03:54:01.273Z)_
 * Implement the pr report --open  and summary format options _(zane@liquid-labs.com; 2021-10-07T04:05:11.177Z)_
+* _**hotfix**_: updated CHANGELOGE.md for release (by liq) _(zane@liquid-labs.com; 2021-10-07T05:00:55.000Z)_
+* _**hotfix**_:  lint fixes _(zane@liquid-labs.com; 2021-10-07T05:04:21.000Z)_
